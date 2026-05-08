@@ -4,12 +4,19 @@ from app.core.config import settings
 from app.routes import auth, ingest, map, alerts, public
 from app.db.session import engine, Base
 
+import os
+
 app = FastAPI(title=settings.PROJECT_NAME)
 
-# CORS Middleware (allow all for hackathon)
+# CORS Middleware
+origins = os.getenv(
+    "CORS_ORIGINS", 
+    "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,*"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
